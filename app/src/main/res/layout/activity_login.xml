@@ -90,7 +90,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/signUpButtonLogin"
+                android:id="@+id/resetPasswordButton"
                 android:layout_width="300dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
@@ -107,6 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="40dp"
+                android:clickable="true"
                 android:gravity="center"
                 android:text="Forgot Password?"
                 android:textColor="#80FFFFFF" />

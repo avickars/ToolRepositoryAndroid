@@ -31,6 +31,9 @@ public class Login extends AppCompatActivity {
     Button loginButton;
     Button signInButton;
 
+    TextView forgotPassword;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +49,15 @@ public class Login extends AppCompatActivity {
 
         email.addTextChangedListener(loginTextWatcher);
         password.addTextChangedListener(loginTextWatcher);
+
+        forgotPassword = (TextView) findViewById(R.id.forgotPasswordTextView);
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgotPasswordClick();
+            }
+        });
 
     }
 
@@ -111,8 +123,13 @@ public class Login extends AppCompatActivity {
         finish();
     }
 
-
     public void loginClick(View view) {
         login(email.getText().toString(),password.getText().toString());
+    }
+
+    // To Forgot Password Page
+    public void forgotPasswordClick() {
+        Intent intent1 = new Intent(getApplicationContext(), ForgotPassword.class);
+        startActivity(intent1);
     }
 }
