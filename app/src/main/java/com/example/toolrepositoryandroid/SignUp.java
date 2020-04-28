@@ -3,6 +3,7 @@ package com.example.toolrepositoryandroid;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -32,6 +33,8 @@ public class SignUp extends AppCompatActivity {
     Button signUpButton;
 
     private FirebaseAuth mAuth;
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +67,11 @@ public class SignUp extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // Dismiss Progress Dialog
+                            progressDialog.dismiss();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-//                            updateUI(user);
 
                             // Going to ToolRepo Now
                             toToolRepo();
@@ -76,7 +80,6 @@ public class SignUp extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getApplicationContext(), "Sign Up Failed.", Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
                         }
 
                         // ...
@@ -99,7 +102,21 @@ public class SignUp extends AppCompatActivity {
     public void signUpClick(View view) {
         // Testing if the Passwords Match
         if (password.getText().toString().equals(passwordConfirm.getText().toString())) {
-            signUp(email.getText().toString(), password.getText().toString());
+            if (password.getText().toString().length() >= 6) {
+
+                // Initializing Progress Dialog
+                progressDialog = new ProgressDialog(SignUp.this);
+                // Show Dialog
+                progressDialog.show();
+                //Set Content View
+                progressDialog.setContentView(R.layout.progress_dialog);
+                // Set Transparent Background
+                progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+                signUp(email.getText().toString(), password.getText().toString());
+            } else {
+                Toast.makeText(getApplicationContext(), "Password must be at least 6 characters.", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(getApplicationContext(), "Passwords Don't Match.", Toast.LENGTH_SHORT).show();
         }
