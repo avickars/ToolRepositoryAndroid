@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "49292993644",
+    "firebase_url": "https://toolrepository-b4c3d.firebaseio.com",
+    "project_id": "toolrepository-b4c3d",
+    "storage_bucket": "toolrepository-b4c3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49292993644:android:17c1df0a0ede839a6d6449",
+        "android_client_info": {
+          "package_name": "com.example.toolrepositoryandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "49292993644-gse1aslueejd9qg9lus5uej8n32mqhae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtR9pIVtzoetgeJpPxVDb--He-K-1LrzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "49292993644-gse1aslueejd9qg9lus5uej8n32mqhae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
