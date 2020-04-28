@@ -84,8 +84,8 @@ public class SignUp extends AppCompatActivity {
                 });
     }
 
-    public void toLogin(View view) {
-        Intent intent = new Intent(getApplicationContext(),Login.class);
+    public void toMainActivity(View view) {
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(intent);
         finish();
     }

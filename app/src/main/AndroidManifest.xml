@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ToolRepo"></activity>
+        <activity android:name=".Profile"></activity>
+        <activity android:name=".ToolRepo" />
         <activity android:name=".Login" />
-        <activity android:name=".Main2Activity" />
         <activity android:name=".SignUp" />
         <activity android:name=".MainActivity">
             <intent-filter>
