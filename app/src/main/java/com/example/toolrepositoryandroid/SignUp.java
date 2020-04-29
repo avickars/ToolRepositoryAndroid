@@ -114,6 +114,8 @@ public class SignUp extends AppCompatActivity {
                             toToolRepo();
 
                         } else {
+                            // Dismiss Progress Dialog
+                            progressDialog.dismiss();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getApplicationContext(), "Sign Up Failed.", Toast.LENGTH_SHORT).show();
