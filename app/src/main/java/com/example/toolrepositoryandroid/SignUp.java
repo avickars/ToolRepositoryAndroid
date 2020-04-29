@@ -50,7 +50,7 @@ public class SignUp extends AppCompatActivity {
         email = (TextView) findViewById(R.id.emailSignUp);
         password = (TextView) findViewById(R.id.passwordSignUp);
         passwordConfirm = (TextView) findViewById(R.id.passwordConfirmSignUp);
-        signUpButton = (Button) findViewById(R.id.signUpButtonLogin);
+        signUpButton = (Button) findViewById(R.id.signUpButtonSignUp);
 
         // Adding in a text Change Listener
         firstName.addTextChangedListener(signUpTextWatcher);
@@ -60,6 +60,43 @@ public class SignUp extends AppCompatActivity {
         passwordConfirm.addTextChangedListener(signUpTextWatcher);
 
     }
+
+    private TextWatcher signUpTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String firstNameInput = firstName.getText().toString().trim();
+            String lastNameInput = lastName.getText().toString().trim();
+            String emailInput = email.getText().toString().trim();
+            String passwordInput = password.getText().toString().trim();
+            String passwordConfirmInput = passwordConfirm.getText().toString().trim();
+
+
+
+            boolean val = !firstNameInput.isEmpty() &&
+                    !lastNameInput.isEmpty() &&
+                    !emailInput.isEmpty() &&
+                    !passwordInput.isEmpty() &&
+                    !passwordConfirmInput.isEmpty();
+
+            if (val) {
+                signUpButton.setEnabled(true);
+                signUpButton.setAlpha(1);
+            } else {
+                signUpButton.setEnabled(false);
+                signUpButton.setAlpha((float) 0.5);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 
     private void signUp(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -122,38 +159,5 @@ public class SignUp extends AppCompatActivity {
         }
     }
 
-    private TextWatcher signUpTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String firstNameInput = firstName.getText().toString().trim();
-            String lastNameInput = lastName.getText().toString().trim();
-            String emailInput = email.getText().toString().trim();
-            String passwordInput = password.getText().toString().trim();
-            String passwordConfirmInput = passwordConfirm.getText().toString().trim();
-
-            boolean val = !firstNameInput.isEmpty() &&
-                    !lastNameInput.isEmpty() &&
-                    !emailInput.isEmpty() &&
-                    !passwordInput.isEmpty() &&
-                    !passwordConfirmInput.isEmpty();
-
-            if (val) {
-                signUpButton.setEnabled(true);
-                signUpButton.setAlpha(1);
-            } else {
-                signUpButton.setEnabled(false);
-                signUpButton.setAlpha((float) 0.5);
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
 }

@@ -90,7 +90,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/resetPasswordButton"
+                android:id="@+id/signUpButtonSignUp"
                 android:layout_width="300dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
