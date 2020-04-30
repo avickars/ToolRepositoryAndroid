@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUp extends AppCompatActivity {
 
@@ -31,6 +33,13 @@ public class SignUp extends AppCompatActivity {
     TextView password;
     TextView passwordConfirm;
     Button signUpButton;
+
+    // String Fields
+    String firstNameInput;
+    String lastNameInput;
+    String emailInput;
+    String passwordInput;
+    String passwordConfirmInput;
 
     private FirebaseAuth mAuth;
 
@@ -52,6 +61,13 @@ public class SignUp extends AppCompatActivity {
         passwordConfirm = (TextView) findViewById(R.id.passwordConfirmSignUp);
         signUpButton = (Button) findViewById(R.id.signUpButtonSignUp);
 
+        // Defining Strings to be used
+        String emailInput;
+        String firstNameInput;
+        String lastNameInput;
+        String passwordInput;
+        String passwordConfirmInput;
+
         // Adding in a text Change Listener
         firstName.addTextChangedListener(signUpTextWatcher);
         lastName.addTextChangedListener(signUpTextWatcher);
@@ -69,11 +85,12 @@ public class SignUp extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String firstNameInput = firstName.getText().toString().trim();
-            String lastNameInput = lastName.getText().toString().trim();
-            String emailInput = email.getText().toString().trim();
-            String passwordInput = password.getText().toString().trim();
-            String passwordConfirmInput = passwordConfirm.getText().toString().trim();
+            firstNameInput = firstName.getText().toString().trim();
+            lastNameInput = lastName.getText().toString().trim();
+            emailInput = email.getText().toString().trim();
+            passwordInput = password.getText().toString().trim();
+            passwordConfirmInput = passwordConfirm.getText().toString().trim();
+
 
 
 
@@ -98,17 +115,28 @@ public class SignUp extends AppCompatActivity {
         }
     };
 
-    private void signUp(String email, String password) {
+    private void signUp(final String email, final String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // DataBase, Storing User Information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference myRef = database.getReference().child("users").child(user.getUid());
+                            myRef.child("userID").setValue(user.getUid());
+                            myRef.child("firstName").setValue(firstNameInput);
+                            myRef.child("lastName").setValue(lastNameInput);
+                            myRef.child("email").setValue(emailInput);
+
+//                            FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("email").setValue(emailInput);
+
                             // Dismiss Progress Dialog
                             progressDialog.dismiss();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+
 
                             // Going to ToolRepo Now
                             toToolRepo();
