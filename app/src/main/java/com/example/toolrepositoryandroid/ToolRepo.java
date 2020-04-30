@@ -26,6 +26,7 @@ public class ToolRepo extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.addItem:
                 Log.i("Item Selected", "additem");
+                toAddTool();
                 return true;
             case R.id.accountSettings:
                 Log.i("Item Selected", "item");
@@ -40,6 +41,12 @@ public class ToolRepo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tool_repo);
+    }
+
+    private void toAddTool() {
+        Intent intent = new Intent(getApplicationContext(), AddTool.class);
+        startActivity(intent);
+        finish();
     }
 
     private void toProfile() {
