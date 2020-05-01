@@ -20,12 +20,12 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ForgotPassword extends AppCompatActivity {
 
-    TextView email;
-    Button resetPassword;
+    private TextView email;
+    private Button resetPassword;
 
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
 
-    Boolean status;
+    private Boolean status;
 
     AlertDialog.Builder a;
 

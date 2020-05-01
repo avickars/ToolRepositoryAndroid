@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,14 +30,17 @@ public class Login extends AppCompatActivity {
     private static final String TAG = "EmailPassword";
 
     private FirebaseAuth mAuth;
-    TextView email;
-    TextView password;
-    Button loginButton;
-    Button signInButton;
+    private TextView email;
+    private TextView password;
+    private Button loginButton;
+    private Button signInButton;
 
-    TextView forgotPassword;
+    private TextView forgotPassword;
 
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
+
+    // Alert
+    AlertDialog.Builder a;
 
 
     @Override
@@ -63,6 +67,11 @@ public class Login extends AppCompatActivity {
                 forgotPasswordClick();
             }
         });
+
+        // Initialize Alert
+        a = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert);
+
 
     }
 
@@ -99,14 +108,21 @@ public class Login extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     // Dismiss Progress Dialog
-                    progressDialog.dismiss();
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success");
                     FirebaseUser user = mAuth.getCurrentUser();
 //                    updateUI(user);
+                    if (user.isEmailVerified()){
+                        progressDialog.dismiss();
+                        // Going to ToolRepo
+                        toToolRepo();
+                    } else {
+                        user.sendEmailVerification();
+                        FirebaseAuth.getInstance().signOut();
+                        progressDialog.dismiss();
+                        alert();
+                    }
 
-                    // Going to ToolRepo
-                    toToolRepo();
                 } else {
                     // Dismiss Progress Dialog
                     progressDialog.dismiss();
@@ -142,6 +158,18 @@ public class Login extends AppCompatActivity {
         // Set Transparent Background
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         login(email.getText().toString(),password.getText().toString());
+    }
+
+    private void alert() {
+        a.setMessage("The Email: " + email.getText().toString() + " has not been verified.  " +
+                "A verification email has been sent to this address please verify the email and try again.")
+                .setNeutralButton("Continue", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
     }
 
     // To Forgot Password Page

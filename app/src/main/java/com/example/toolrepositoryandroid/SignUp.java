@@ -1,9 +1,11 @@
 package com.example.toolrepositoryandroid;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -41,6 +43,9 @@ public class SignUp extends AppCompatActivity {
     String passwordInput;
     String passwordConfirmInput;
 
+    // Alert
+    AlertDialog.Builder a;
+
     private FirebaseAuth mAuth;
 
     ProgressDialog progressDialog;
@@ -49,6 +54,10 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        // Initialize Alert
+        a = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -60,13 +69,6 @@ public class SignUp extends AppCompatActivity {
         password = (TextView) findViewById(R.id.passwordSignUp);
         passwordConfirm = (TextView) findViewById(R.id.passwordConfirmSignUp);
         signUpButton = (Button) findViewById(R.id.signUpButtonSignUp);
-
-        // Defining Strings to be used
-        String emailInput;
-        String firstNameInput;
-        String lastNameInput;
-        String passwordInput;
-        String passwordConfirmInput;
 
         // Adding in a text Change Listener
         firstName.addTextChangedListener(signUpTextWatcher);
@@ -122,7 +124,10 @@ public class SignUp extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // DataBase, Storing User Information
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                            // Sending email confirmation
+                            user.sendEmailVerification();
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference myRef = database.getReference().child("users").child(user.getUid());
                             myRef.child("userID").setValue(user.getUid());
@@ -130,16 +135,14 @@ public class SignUp extends AppCompatActivity {
                             myRef.child("lastName").setValue(lastNameInput);
                             myRef.child("email").setValue(emailInput);
 
-//                            FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("email").setValue(emailInput);
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseAuth.getInstance().signOut();
 
                             // Dismiss Progress Dialog
                             progressDialog.dismiss();
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
 
-
-                            // Going to ToolRepo Now
-                            toToolRepo();
+                            alert();
 
                         } else {
                             // Dismiss Progress Dialog
@@ -154,7 +157,24 @@ public class SignUp extends AppCompatActivity {
                 });
     }
 
+    private void alert() {
+            a.setMessage("An email has been sent to: " + email.getText().toString() + ".  Please verify this email then login.")
+                    .setNeutralButton("Continue", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            toMainActivity();
+                        }
+                    })
+                    .show();
+    }
+
     public void toMainActivity(View view) {
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void toMainActivity() {
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(intent);
         finish();

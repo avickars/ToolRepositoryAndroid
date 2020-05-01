@@ -23,6 +23,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -33,23 +37,32 @@ import java.util.UUID;
 
 public class AddTool extends AppCompatActivity {
 
-    ImageView image;
+    private ImageView image;
 
-    TextView addImage;
+    private TextView addImage;
 
-    Intent getImageIntent;
+    private Intent getImageIntent;
 
-    TextView toolName;
-    TextView toolType;
-    TextView toolLocation;
-    TextView toolDescription;
+    private TextView toolName;
+    private TextView toolType;
+    private TextView toolLocation;
+    private TextView toolDescription;
+    private TextView toolOwner;
 
-    Button addTool;
+    private String toolNameInput;
+    private String toolTypeInput;
+    private String toolLocationInput;
+    private String toolDescriptionInput;
+    private String toolOwnerInput;
+
+    private Button addTool;
 
     // To Upload Image
-    String imageName = UUID.randomUUID().toString() + ".jpg";
+    private String imageName = UUID.randomUUID().toString() + ".jpg";
+    private String toolID = UUID.randomUUID().toString();
 
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +78,15 @@ public class AddTool extends AppCompatActivity {
         toolType = (TextView) findViewById(R.id.toolType);
         toolLocation = (TextView) findViewById(R.id.toolLocation);
         toolDescription = (TextView) findViewById(R.id.toolDescription);
+        toolOwner = (TextView) findViewById(R.id.toolOwner);
 
         addTool = (Button) findViewById(R.id.addToolButton);
 
+        toolName.addTextChangedListener(newToolWatcher);
         toolType.addTextChangedListener(newToolWatcher);
         toolLocation.addTextChangedListener(newToolWatcher);
         toolDescription.addTextChangedListener(newToolWatcher);
+        toolOwner.addTextChangedListener(newToolWatcher);
     }
 
     private TextWatcher newToolWatcher = new TextWatcher() {
@@ -81,15 +97,18 @@ public class AddTool extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String toolNameInput = toolName.getText().toString().trim();
-            String toolTypeInput = toolType.getText().toString().trim();
-            String toolLocationInput = toolLocation.getText().toString().trim();
+            toolNameInput = toolName.getText().toString().trim();
+            toolTypeInput = toolType.getText().toString().trim();
+            toolLocationInput = toolLocation.getText().toString().trim();
+            toolDescriptionInput = toolDescription.getText().toString().trim();
+            toolOwnerInput = toolOwner.getText().toString().trim();
 
 
 
             boolean val = !toolNameInput.isEmpty() &&
                     !toolTypeInput.isEmpty() &&
-                    !toolLocationInput.isEmpty();
+                    !toolLocationInput.isEmpty() &&
+                    !toolOwnerInput.isEmpty();
 
             if (val) {
                 addTool.setEnabled(true);
@@ -156,7 +175,7 @@ public class AddTool extends AppCompatActivity {
         byte[] data = baos.toByteArray();
 
 
-
+        // Submitting everything online
         UploadTask uploadTask = FirebaseStorage.getInstance().getReference().child("images").child(imageName).putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -166,8 +185,26 @@ public class AddTool extends AppCompatActivity {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                progressDialog.dismiss();
+
                 Toast.makeText(getApplicationContext(), "Tool Successfully Created", Toast.LENGTH_SHORT).show();
+
+
+                // Getting User ID
+                mAuth = FirebaseAuth.getInstance();
+
+                // Submitting fields to database
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference().child("tools").child(toolID);
+                myRef.child("userID").setValue(toolID);
+                myRef.child("toolName").setValue(toolNameInput);
+                myRef.child("toolType").setValue(toolTypeInput);
+                myRef.child("toolLocation").setValue(toolLocationInput);
+                myRef.child("toolDescription").setValue(toolDescriptionInput);
+                myRef.child("toolImage").setValue(imageName);
+                myRef.child("userID").setValue(mAuth.getCurrentUser().getUid());
+                myRef.child("toolOwner").setValue(toolOwnerInput);
+
+                progressDialog.dismiss();
                 toToolRepo();
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
             }
