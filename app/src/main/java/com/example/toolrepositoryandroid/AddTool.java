@@ -64,6 +64,8 @@ public class AddTool extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
 
+    Tool tool;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +89,8 @@ public class AddTool extends AppCompatActivity {
         toolLocation.addTextChangedListener(newToolWatcher);
         toolDescription.addTextChangedListener(newToolWatcher);
         toolOwner.addTextChangedListener(newToolWatcher);
+
+        tool = new Tool();
     }
 
     private TextWatcher newToolWatcher = new TextWatcher() {
@@ -102,6 +106,12 @@ public class AddTool extends AppCompatActivity {
             toolLocationInput = toolLocation.getText().toString().trim();
             toolDescriptionInput = toolDescription.getText().toString().trim();
             toolOwnerInput = toolOwner.getText().toString().trim();
+
+            tool.setToolName(toolNameInput);
+            tool.setToolType(toolTypeInput);
+            tool.setToolLocation(toolLocationInput);
+            tool.setToolDescription(toolDescriptionInput);
+            tool.setToolOwner(toolOwnerInput);
 
 
 
@@ -195,14 +205,18 @@ public class AddTool extends AppCompatActivity {
                 // Submitting fields to database
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference().child("tools").child(toolID);
-                myRef.child("userID").setValue(toolID);
-                myRef.child("toolName").setValue(toolNameInput);
-                myRef.child("toolType").setValue(toolTypeInput);
-                myRef.child("toolLocation").setValue(toolLocationInput);
-                myRef.child("toolDescription").setValue(toolDescriptionInput);
-                myRef.child("toolImage").setValue(imageName);
-                myRef.child("userID").setValue(mAuth.getCurrentUser().getUid());
-                myRef.child("toolOwner").setValue(toolOwnerInput);
+                tool.setUserID(mAuth.getCurrentUser().getUid());
+                tool.setToolID(toolID);
+                tool.setToolImage(imageName);
+                myRef.setValue(tool);
+//                myRef.child("userID").setValue(toolID);
+//                myRef.child("toolName").setValue(toolNameInput);
+//                myRef.child("toolType").setValue(toolTypeInput);
+//                myRef.child("toolLocation").setValue(toolLocationInput);
+//                myRef.child("toolDescription").setValue(toolDescriptionInput);
+//                myRef.child("toolImage").setValue(imageName);
+//                myRef.child("userID").setValue(mAuth.getCurrentUser().getUid());
+//                myRef.child("toolOwner").setValue(toolOwnerInput);
 
                 progressDialog.dismiss();
                 toToolRepo();
