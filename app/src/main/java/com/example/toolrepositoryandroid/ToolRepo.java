@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +29,46 @@ import java.util.List;
 public class ToolRepo extends AppCompatActivity {
     ListView toolsList;
 
+    FirebaseDatabase database;
+    DatabaseReference ref;
+
+
+    ArrayList<String> list;
+    ArrayAdapter<String> adapter;
+    Tool tool;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        tool = new Tool();
+
         setContentView(R.layout.activity_tool_repo);
 
         toolsList = (ListView) findViewById(R.id.toolsListView);
 
+        database = FirebaseDatabase.getInstance();
+        ref = database.getReference("tools");
+        list = new ArrayList<>();
+        adapter = new ArrayAdapter<String>(this, R.layout.tool_info, R.id.toolInfo, list);
+
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds: dataSnapshot.getChildren()) {
+                    tool = ds.getValue(Tool.class);
+                    list.add(tool.getToolName().toString());
+                }
+                toolsList.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -66,6 +101,7 @@ public class ToolRepo extends AppCompatActivity {
                 return false;
         }
     }
+
     private void toAddTool() {
         Intent intent = new Intent(getApplicationContext(), AddTool.class);
         startActivity(intent);
