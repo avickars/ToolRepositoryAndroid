@@ -39,8 +39,8 @@ public class ToolListAdapter extends ArrayAdapter<Tool> {
         convertView = inflater.inflate(mResource,parent,false);
 
         TextView toolNameTextView = (TextView) convertView.findViewById(R.id.toolNameTextView);
-        TextView toolTypeTextView = (TextView) convertView.findViewById(R.id.textView2);
-        TextView toolLocationTextView = (TextView) convertView.findViewById(R.id.textView3);
+        TextView toolTypeTextView = (TextView) convertView.findViewById(R.id.toolTypeTextView);
+        TextView toolLocationTextView = (TextView) convertView.findViewById(R.id.toolLocationTextView);
 
         toolNameTextView.setText(toolName);
         toolTypeTextView.setText(toolType);

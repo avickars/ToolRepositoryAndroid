@@ -1,43 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    android:orientation="horizontal"
     android:weightSum="100">
 
-
-    <TextView
-        android:gravity="center"
-        android:textAlignment="center"
-        android:text="TextView1"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:id="@+id/toolNameTextView"
-        android:layout_weight="66.6"
-        android:textColor="#03A9F4" />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="33.3">
-
-        <TextView
-            android:gravity="center"
-            android:text="TextView2"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:id="@+id/textView2"
-            android:textColor="#03A9F4" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <TextView
-            android:gravity="center"
-            android:text="TextView3"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:id="@+id/textView3"
-            android:layout_below="@+id/textView2"
-            android:textColor="#03A9F4" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/textView89"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name: "
+                    android:textColor="#2196F3" />
+
+                <TextView
+                    android:id="@+id/toolNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="22dp"
+                    android:layout_height="wrap_content"
+                    tools:ignore="NestedWeights" />
+
+                <TextView
+                    android:id="@+id/textView890"
+                    android:layout_width="61dp"
+                    android:layout_height="wrap_content"
+                    android:text="Type: "
+                    android:textColor="#2196F3" />
+
+                <TextView
+                    android:id="@+id/toolTypeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="22dp"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/textView8900"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location: "
+                    android:textColor="#2196F3" />
+
+                <TextView
+                    android:id="@+id/toolLocationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
