@@ -1,7 +1,6 @@
 package com.example.toolrepositoryandroid;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,13 +9,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ToolRepo extends AppCompatActivity {
     ListView toolsList;
@@ -33,8 +27,8 @@ public class ToolRepo extends AppCompatActivity {
     DatabaseReference ref;
 
 
-    ArrayList<String> list;
-    ArrayAdapter<String> adapter;
+    ArrayList<Tool> list;
+    ToolListAdapter adapter;
     Tool tool;
 
 
@@ -51,7 +45,9 @@ public class ToolRepo extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("tools");
         list = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(this, R.layout.tool_info, R.id.toolInfo, list);
+//        adapter = new ArrayAdapter<Tool>(this, R.layout.tool_info, R.id.toolNameTextView, list);
+
+        adapter = new ToolListAdapter(this, R.layout.tool_info, list);
 
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -59,7 +55,7 @@ public class ToolRepo extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds: dataSnapshot.getChildren()) {
                     tool = ds.getValue(Tool.class);
-                    list.add(tool.getToolName().toString());
+                    list.add(tool);
                 }
                 toolsList.setAdapter(adapter);
             }
